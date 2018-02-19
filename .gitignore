@@ -259,3 +259,9 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/ToDoList/Data/Migrations/20180219212618_todoItems2.Designer.cs
+/ToDoList/Data/Migrations/20180219212618_todoItems2.cs
+/ToDoList/Data/Migrations/20180219211453_todoItems1.Designer.cs
+/ToDoList/Data/Migrations/20180219211453_todoItems1.cs
+/ToDoList/Data/Migrations/20180219204646_add-migration.Designer.cs
+/ToDoList/Data/Migrations/20180219204646_add-migration.cs

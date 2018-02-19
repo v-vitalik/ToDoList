@@ -46,7 +46,6 @@ namespace ToDoList.Controllers
         {
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
@@ -65,7 +64,7 @@ namespace ToDoList.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Index", "TodoItems");
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -247,7 +246,7 @@ namespace ToDoList.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(Login));
         }
 
         [HttpPost]
@@ -335,7 +334,7 @@ namespace ToDoList.Controllers
         {
             if (userId == null || code == null)
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToAction(nameof(Login));
             }
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
@@ -455,7 +454,7 @@ namespace ToDoList.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToAction(nameof(Login));
             }
         }
 
