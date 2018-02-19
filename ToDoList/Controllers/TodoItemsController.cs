@@ -39,6 +39,8 @@ namespace ToDoList.Controllers
         // GET: TodoItems/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (!_signInManager.IsSignedIn(User))
+                return RedirectToAction("Login", "Account");
             if (id == null)
             {
                 return NotFound();
@@ -58,8 +60,9 @@ namespace ToDoList.Controllers
         // GET: TodoItems/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
+            if(_signInManager.IsSignedIn(User))
+                return View();
+            return RedirectToAction("Login", "Account");
         }
 
         // POST: TodoItems/Create
@@ -82,17 +85,20 @@ namespace ToDoList.Controllers
         // GET: TodoItems/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!_signInManager.IsSignedIn(User))
+                return RedirectToAction("Login", "Account");
+
             if (id == null)
             {
                 return NotFound();
             }
+
 
             var todoItem = await _context.TodoItems.SingleOrDefaultAsync(m => m.Id == id);
             if (todoItem == null)
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", todoItem.User);
             return View(todoItem);
         }
 
@@ -101,7 +107,7 @@ namespace ToDoList.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Deadline,IsDone,UserId")] TodoItem todoItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Deadline,IsDone")] TodoItem todoItem)
         {
             if (id != todoItem.Id)
             {
@@ -135,6 +141,9 @@ namespace ToDoList.Controllers
         // GET: TodoItems/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!_signInManager.IsSignedIn(User))
+                return RedirectToAction("Login", "Account");
+
             if (id == null)
             {
                 return NotFound();
@@ -161,7 +170,7 @@ namespace ToDoList.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        
         private bool TodoItemExists(int id)
         {
             return _context.TodoItems.Any(e => e.Id == id);
